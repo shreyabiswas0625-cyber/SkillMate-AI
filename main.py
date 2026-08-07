@@ -4,6 +4,9 @@ import io
 import os
 from google import genai
 from dotenv import load_dotenv
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
 
 #Loading env variables
 load_dotenv()
@@ -43,6 +46,54 @@ def extract_text_from_file(uploaded_file):
     if uploaded_file.type == "application/pdf":
         return extract_text_from_pdf(io.BytesIO(uploaded_file.read()))
     return uploaded_file.read().decode("utf-8")
+
+def create_pdf_report(analysis_text):
+    buffer = io.BytesIO()
+
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=letter,
+        rightMargin=50,
+        leftMargin=50,
+        topMargin=50,
+        bottomMargin=50
+    )
+
+    styles = getSampleStyleSheet()
+    title_style = styles["Title"]
+    heading_style = styles["Heading2"]
+    body_style = styles["BodyText"]
+
+    story = []
+
+    story.append(Paragraph("SkillMate AI - Resume Analysis Report", title_style))
+    story.append(Spacer(1, 20))
+
+    # AI response into PDF text
+    lines = analysis_text.split("\n")
+
+    for line in lines:
+        line = line.strip()
+
+        if not line:
+            story.append(Spacer(1, 8))
+            continue
+
+        # Removing Markdown symbols
+        clean_line = line.replace("**", "").replace("*", "•")
+
+        if clean_line.startswith("#"):
+            clean_line = clean_line.replace("#", "").strip()
+            story.append(Paragraph(clean_line, heading_style))
+        else:
+            story.append(Paragraph(clean_line, body_style))
+
+    doc.build(story)
+
+    buffer.seek(0)
+    return buffer
+
+
 
 if analyze and uploaded_file:
     try:
@@ -91,6 +142,16 @@ if analyze and uploaded_file:
 
         st.markdown("## 📊 Resume Analysis")
         st.markdown(response.text)
+
+        # Generating PDF report
+        pdf_file = create_pdf_report(response.text)
+
+        st.download_button(
+            label="📥 Download PDF Report",
+            data=pdf_file,
+            file_name="SkillMate_AI_Resume_Report.pdf",
+            mime="application/pdf"
+        )
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
