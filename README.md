@@ -4,6 +4,9 @@ SkillMate AI is an AI-powered Resume Reviewer built with **Python**, **Streamlit
 
 ---
 
+## Live Demo
+👉 [Try SkillMate AI](👉 https://shreyabiswas0625-cyber-skillmate-ai-main-h9pkyv.streamlit.app/#skill-mate-ai)
+
 ## ✨ Features
 
 - Upload resumes in PDF/TXT format
