@@ -30,6 +30,7 @@ SkillMate AI is an AI-powered Resume Reviewer built with **Python**, **Streamlit
 - **Google Gemini API**
 - **PyPDF2**
 - **python-dotenv**
+- **reportlab**
 
 ---
 
