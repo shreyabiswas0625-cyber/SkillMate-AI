@@ -8,6 +8,7 @@ SkillMate AI is an AI-powered Resume Reviewer built with **Python**, **Streamlit
 
 - Upload resumes in PDF/TXT format
 - AI-powered resume analysis using Google Gemini
+- Download AI-generated resume analysis as a PDF report
 - Comprehensive evaluation across:
 
   - Overall Resume Score (out of 100)
